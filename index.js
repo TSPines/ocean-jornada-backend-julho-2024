@@ -9,7 +9,7 @@ app.listen(3000)
 
 
 //Desafio: criar endpoint /oi que exibe "Olá, mundo!
-app.get("/oi", function (req, res){
+app.get('/oi', function (req, res){
   res.send('Olá, mundo!')
 })
 
