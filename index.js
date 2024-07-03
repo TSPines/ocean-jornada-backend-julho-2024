@@ -14,7 +14,8 @@ app.get('/oi', function (req, res){
 const lista = ['Rick Sanchez','Morty Smith','Summer Smith']
 
 // Read All - [GET] / item
-app.get("/item", function(req,res){
+app.get('/item', function(req,res){
+  res.send('Read all')
 
 } )
 
