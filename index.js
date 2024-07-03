@@ -8,7 +8,7 @@ app.get('/', function (req, res) {
 app.listen(3000)
 
 
-//Desafio: criar endpoin /oi que exibe "Olá, mundo!
+//Desafio: criar endpoint /oi que exibe "Olá, mundo!
 app.get("/oi", function (req, res){
   res.send('Olá, mundo!')
 })
