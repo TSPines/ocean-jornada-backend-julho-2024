@@ -19,4 +19,9 @@ app.get('/item', function(req,res){
 
 } )
 
+// Create - [POST] /item
+app.post('/item', function (req,res) {
+  res.send('Create')
+})
+
 app.listen(3000)
