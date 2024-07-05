@@ -37,10 +37,7 @@ async function main() {
     // Pegamos os documentos e enviamos como resposta HTTP
     res.send(documentos)
 
-    //Pegamos a lista e enviamos como reposta HTTP
-    res.send(lista)
-
-  })
+     })
 
   //sinalizamos para o Express que vamos usar JASON no Body
   app.use(express.json())
