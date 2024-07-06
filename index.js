@@ -1,6 +1,6 @@
 
 const express = require('express')
-const { MongoClient, ConnectionPoolReadyEvent } = require('mongodb')
+const { MongoClient, ConnectionPoolReadyEvent, ObjectId } = require('mongodb')
 const app = express()
 
 const dbUrl = 'mongodb+srv://admin:KuNKeucE96KNkuLi@cluster0.kqsrql1.mongodb.net'
@@ -77,6 +77,18 @@ async function main() {
     res.send('Item atualizado com sucesso: ' + id)
   })
 
+
+  //Delete [DELETE] /item/:id
+  app.delete('/item/:id', async function (req, res) {
+    //Acessamos o ID do parametro de rota
+    const id = req. params.id
+
+    //Remove o item da collection pelo ObjectId
+    await collection.deleteOne({ _id: new ObjectId(id) })
+
+    //Enviamos uma mensagem de sucesso
+    res.send('Item removido com sucesso!')
+  })
 
   app.listen(3000)
 }
