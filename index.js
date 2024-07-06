@@ -40,14 +40,6 @@ async function main() {
   app.use(express.json())
 
   // Create - [POST] /item
-  app.post('/item', function (req, res) {
-    const item = req.body
-    lista.push(item)
-
-    res.send('Item criado com sucesso!')
-  })
-
-  // Create - [POST] /item
   app.post('/item', async function (req, res) {
     // Obtemos o objeto inteiro enviado no Request Body
     const item = req.body
@@ -57,7 +49,7 @@ async function main() {
     res.send(item)
   })
 
-  // Read By Id - [GET] /item/:id
+    // Read By Id - [GET] /item/:id
   app.get('/item/:id', async function (req, res) {
     // Acessamos o parâmetro de rota ID
     const id = req.params.id
