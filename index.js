@@ -29,32 +29,15 @@ async function main() {
   const db = cliente.db(dbName)
   const collection = db.collection('item')
 
-  // Read All - [GET] / item
-  app.get('/item', async function (req, res) {    
-    // Acessamos o parametro da rota ID
-    const id = req.params.id
-
-    //Obter todos os docmentos da collection
-    const item = await collection.findOne({ _id: new Object(id) })
-
-    // Enviamos o item obtido como resposta
-    res.send(item)
-     })
-
-    //Update - [PUT] /item/:id
-    app.put('/item/:id', async function (req, res){
-      //Acessamos o ID do parametro de rota
-      const id = req.params.id
-      //Acessamos o novoItem no body da requisição
-      const novoItem = req.body
-      //Atualizamos a collection com a nova informação
-      await collection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: novoItem}
-      )
-      //Enviamos uma mensagem de sucesso
-      res.send('Item atualizado com sucesso: '+ id)
-    })
+  // Read All - [GET] /item
+  app.get('/item', async function (req, res) {
+    // Obter todos os documentos da collection
+    const documentos = await collection.find().toArray()
+    // Pegamos os documentos e enviamos como resposta HTTP
+    res.send(documentos)
+  })
+  // Sinalizamos para o Express que vamos usar JSON no Body
+  app.use(express.json())
 
   // Create - [POST] /item
   app.post('/item', function (req, res) {
@@ -64,30 +47,38 @@ async function main() {
     res.send('Item criado com sucesso!')
   })
 
-  // Read by Id - [GET] /item/:id
-  app.get('/item/:id', function (req, res) {
-    //Acessamos o parametro de rota ID
-    const id = req.params.id
-
-    //Acessamos o item na lista pelo índice corrigido
-    const item = lista[id - 1]
-
-    //enviamos o item obtido como resposta
+  // Create - [POST] /item
+  app.post('/item', async function (req, res) {
+    // Obtemos o objeto inteiro enviado no Request Body
+    const item = req.body
+    // Inserimos o item na collection
+    await collection.insertOne(item)
+    // Exibe o item que foi adicionado
     res.send(item)
   })
 
-  //Update - [PUT] /item/:id
-  app.put('/item/:id', function (req, res) {
-    //Acessamos o ID do parametro de rota
+  // Read By Id - [GET] /item/:id
+  app.get('/item/:id', async function (req, res) {
+    // Acessamos o parâmetro de rota ID
     const id = req.params.id
+    // Acessamos o item na collection pelo ObjectId
+    const item = await collection.findOne({ _id: new ObjectId(id) })
+    // Enviamos o item obtido como resposta
+    res.send(item)
+  })
 
-    //Acessamos o body da requisição, com os dados a serem atualizados
-    const novoItem = req.body.nome
-
-    //Atualizamos esse novoItem da lista, usando o Indice
-    lista[id - 1] = novoItem
-
-    //Enviamos uma mensagem de sucesso
+  // Update - [PUT] /item/:id
+  app.put('/item/:id', async function (req, res) {
+    // Acessamos o ID do parâmetro de rota
+    const id = req.params.id
+    // Acessamos o novoItem no body da requisição
+    const novoItem = req.body
+    // Atualizamos a collection com a nova informação
+    await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: novoItem }
+    )
+    // Enviamos uma mensagem de sucesso
     res.send('Item atualizado com sucesso: ' + id)
   })
 
@@ -95,7 +86,7 @@ async function main() {
   //Delete [DELETE] /item/:id
   app.delete('/item/:id', async function (req, res) {
     //Acessamos o ID do parametro de rota
-    const id = req. params.id
+    const id = req.params.id
 
     //Remove o item da collection pelo ObjectId
     await collection.deleteOne({ _id: new ObjectId(id) })
