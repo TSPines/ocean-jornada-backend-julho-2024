@@ -31,20 +31,34 @@ async function main() {
 
   // Read All - [GET] / item
   app.get('/item', async function (req, res) {    
+    // Acessamos o parametro da rota ID
+    const id = req.params.id
+
     //Obter todos os docmentos da collection
-    const documentos = await collection.find().toArray()
+    const item = await collection.findOne({ _id: new Object(id) })
 
-    // Pegamos os documentos e enviamos como resposta HTTP
-    res.send(documentos)
-
+    // Enviamos o item obtido como resposta
+    res.send(item)
      })
 
-  //sinalizamos para o Express que vamos usar JASON no Body
-  app.use(express.json())
+    //Update - [PUT] /item/:id
+    app.put('/item/:id', async function (req, res){
+      //Acessamos o ID do parametro de rota
+      const id = req.params.id
+      //Acessamos o novoItem no body da requisição
+      const novoItem = req.body
+      //Atualizamos a collection com a nova informação
+      await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: novoItem}
+      )
+      //Enviamos uma mensagem de sucesso
+      res.send('Item atualizado com sucesso: '+ id)
+    })
 
   // Create - [POST] /item
   app.post('/item', function (req, res) {
-    const item = req.body.nome
+    const item = req.body
     lista.push(item)
 
     res.send('Item criado com sucesso!')
